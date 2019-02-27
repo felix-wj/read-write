@@ -2,9 +2,7 @@ package cn.wangjie.learn;
 
 import org.junit.Test;
 
-import java.util.concurrent.Executor;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.*;
 
 /**
  * @program: read-write
@@ -14,7 +12,7 @@ import java.util.concurrent.Executors;
  **/
 public class ThreadTest {
     @Test
-    public void test(){
+    public void test() throws ExecutionException, InterruptedException {
         ExecutorService executor =Executors.newFixedThreadPool(10);
         Executors.unconfigurableExecutorService(executor);
         Runnable runnable = new Runnable() {
@@ -23,5 +21,14 @@ public class ThreadTest {
                 System.out.println("runnable");
             }
         };
+        Callable<Integer> integerCallable = new Callable<Integer>() {
+            @Override
+            public Integer call() throws Exception {
+                return 1;
+            }
+        };
+        FutureTask futureTask = new FutureTask(integerCallable);
+        futureTask.run();
+        System.out.println(futureTask.get());
     }
 }
