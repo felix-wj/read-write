@@ -3,11 +3,9 @@ package cn.wangjie.learn;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 
-import java.lang.ref.SoftReference;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalAdjuster;
 import java.time.temporal.TemporalAdjusters;
 import java.util.TimeZone;
 
@@ -75,6 +73,12 @@ public class TimeTest {
         LocalDate now = LocalDate.now();
         LocalDate date = now.with(TemporalAdjusters.dayOfWeekInMonth(1,DayOfWeek.MONDAY));
         System.out.println(date);
+        LocalDateTime todayNoon = LocalDateTime.of(LocalDate.now(),LocalTime.NOON);
+        ZoneId zone = ZoneId.systemDefault();
+        Instant instant = todayNoon.atZone(zone).toInstant();
+        long todayNoonMillis = instant.toEpochMilli();
+        long yesterdayNoonMillis = instant.plus(-1,ChronoUnit.DAYS).toEpochMilli();
+        System.out.println(yesterdayNoonMillis);
     }
 
     @Test
