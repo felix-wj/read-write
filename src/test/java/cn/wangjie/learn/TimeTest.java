@@ -39,17 +39,18 @@ public class TimeTest {
         log.info("America/Anchorage时区下的当前日期:{}",todayAtAmericaAnchorage);
         log.info("LocalDate.MAX:{}",LocalDate.MAX);
         log.info("LocalDate.MIN:{}",LocalDate.MIN);
+
+        LocalDate localDate = LocalDate.now(ZoneId.of("Asia/Shanghai"));
+        log.info("格式化输出:{}",localDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
     }
     @Test
     public void localTimeTest(){
         log.info("中午:{}",LocalTime.NOON);
         log.info("午夜:{}",LocalTime.MIDNIGHT);
-    }
-    @Test
-    public void localDateTimeTest(){
-        LocalDateTime todayNoon = LocalDateTime.of(LocalDate.now(),LocalTime.NOON);
-        log.info("今天中午:{}",todayNoon);
-        
+        LocalDateTime today= LocalDateTime.of(LocalDate.now(), LocalTime.MIDNIGHT);
+        System.out.println(today);
+        LocalDateTime tomorrow =today.plusDays(1);
+        System.out.println(tomorrow);
     }
     @Test
     public void durationTest(){
