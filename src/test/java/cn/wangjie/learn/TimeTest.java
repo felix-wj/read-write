@@ -2,6 +2,7 @@ package cn.wangjie.learn;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
+import org.springframework.web.util.HtmlUtils;
 
 import java.time.*;
 import java.time.format.DateTimeFormatter;
@@ -95,6 +96,12 @@ public class TimeTest {
         System.out.println(TimeZone.getDefault().getDisplayName());
         System.out.println(TimeZone.getTimeZone("CTT").getDisplayName());
         System.out.println(TimeZone.getTimeZone("CST").getDisplayName());
+    }
+    //字符转时间
+    @Test
+    public void strToDate(){
+        LocalDate date = LocalDate.parse("20190522", DateTimeFormatter.ofPattern("yyyyMMdd"));
+        System.out.println(date);
     }
 
 }
