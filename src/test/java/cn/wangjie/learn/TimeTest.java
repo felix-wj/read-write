@@ -8,7 +8,14 @@ import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalAdjusters;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.TimeZone;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import static java.util.regex.Pattern.compile;
 
 /**
  * @program: read-write
@@ -83,19 +90,16 @@ public class TimeTest {
         System.out.println(yesterdayNoonMillis);
     }
 
+    //获取时区
     @Test
-    public void testZone(){
-        LocalTime noonTime =LocalTime.of(12,0,0,0);
-        LocalDateTime todayNoon = LocalDateTime.of(LocalDate.now(),noonTime);
-        LocalDateTime yesterdayNoon = todayNoon.plus(-1,ChronoUnit.DAYS);
-        System.out.println(yesterdayNoon);
-        ZoneId zoneCST = TimeZone.getTimeZone("CST").toZoneId();
-        Instant instant = todayNoon.atZone(zoneCST).toInstant();
-        System.out.println(todayNoon.atZone(zoneCST).format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-        System.out.println(TimeZone.getDefault().getID());
-        System.out.println(TimeZone.getDefault().getDisplayName());
-        System.out.println(TimeZone.getTimeZone("CTT").getDisplayName());
-        System.out.println(TimeZone.getTimeZone("CST").getDisplayName());
+    public void getZone(){
+        //默认时区
+        ZoneId zoneId = ZoneId.systemDefault();
+        System.out.println(zoneId.toString());
+        zoneId = ZoneId.of("Asia/Shanghai");
+        System.out.println(zoneId.toString());
+        zoneId = TimeZone.getTimeZone("CTT").toZoneId();
+        System.out.println(zoneId.toString());
     }
     //字符转时间
     @Test
@@ -103,5 +107,42 @@ public class TimeTest {
         LocalDate date = LocalDate.parse("20190522", DateTimeFormatter.ofPattern("yyyyMMdd"));
         System.out.println(date);
     }
+    //时间格式化输出
+    @Test
+    public void dateToStr(){
+        LocalDate today = LocalDate.now();
+        System.out.println(today.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
 
+        LocalTime time = LocalTime.now();
+        //24小时制
+        System.out.println(time.format(DateTimeFormatter.ofPattern("HH:mm:ss")));
+        //12小时制
+        System.out.println(time.format(DateTimeFormatter.ofPattern("hh:mm:ss")));
+        LocalDateTime now = LocalDateTime.of(today,time);
+        //yyyyMMdd
+        System.out.println(now.format(DateTimeFormatter.BASIC_ISO_DATE));
+        //yyyy-MM-dd
+        System.out.println(now.format(DateTimeFormatter.ISO_DATE));
+        //2019-05-28T15:30:21.047
+        System.out.println(now.format(DateTimeFormatter.ISO_DATE_TIME));
+        //local date
+        System.out.println(now.format(DateTimeFormatter.ISO_LOCAL_DATE));
+        //local time 带毫秒 eg:15:33:00.043
+        System.out.println(now.format(DateTimeFormatter.ISO_LOCAL_TIME));
+        //local dateTime eg:2019-05-28T15:33:00.043
+        System.out.println(now.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+        //2019-W22-2
+        System.out.println(now.format(DateTimeFormatter.ISO_WEEK_DATE));
+    }
+
+    //与Date的转换
+    @Test
+    public void transform(){
+        //date转 localdatetime
+        Date date = new Date();
+        LocalDateTime localDateTime = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+        //localdatetime转date
+        Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant());
+    }
 }
+
