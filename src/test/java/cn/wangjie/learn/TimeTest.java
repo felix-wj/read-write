@@ -25,71 +25,6 @@ import static java.util.regex.Pattern.compile;
  **/
 @Slf4j
 public class TimeTest {
-    @Test
-    public void localDateTest(){
-
-        //距1970-01-01的n天的日期
-        LocalDate date = LocalDate.ofEpochDay(1);
-        log.info("1970-01-01后1天的日期:{}",date);
-        //获取某年某月某日的日期
-        date = LocalDate.of(2019,Month.MAY,2);
-        log.info("2019年5月2日的日期:{}",date);
-        //获取某年的第n天的日期
-        date = LocalDate.ofYearDay(2019,2);
-        log.info("2019年第2天的日期:{}",date);
-        date = LocalDate.parse("2019-01-31");
-        log.info("字符串转时间:{}",date);
-        //默认时区的当前日期
-        LocalDate today = LocalDate.now();
-        log.info("默认时区(Asia/Shanghai)下的当前日期:{}",today);
-        //某个指定时区的当前日期
-        LocalDate todayAtAmericaAnchorage = LocalDate.now(ZoneId.of("America/Anchorage"));
-        log.info("America/Anchorage时区下的当前日期:{}",todayAtAmericaAnchorage);
-        log.info("LocalDate.MAX:{}",LocalDate.MAX);
-        log.info("LocalDate.MIN:{}",LocalDate.MIN);
-
-        LocalDate localDate = LocalDate.now(ZoneId.of("Asia/Shanghai"));
-        log.info("格式化输出:{}",localDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
-    }
-    @Test
-    public void localTimeTest(){
-        log.info("中午:{}",LocalTime.NOON);
-        log.info("午夜:{}",LocalTime.MIDNIGHT);
-        LocalDateTime today= LocalDateTime.of(LocalDate.now(), LocalTime.MIDNIGHT);
-        System.out.println(today);
-        LocalDateTime tomorrow =today.plusDays(1);
-        System.out.println(tomorrow);
-    }
-    @Test
-    public void durationTest(){
-        LocalDateTime now = LocalDateTime.now();
-        LocalDateTime date = LocalDateTime.of(2019,1,20,17,0);
-        Duration duration = Duration.between(now,date);
-        System.out.println(duration.toDays());
-        Instant nowMilli = Instant.now();
-        Instant dateMilli = Instant.ofEpochMilli(1543834532474L);
-        duration = Duration.between(dateMilli,nowMilli);
-        System.out.println(duration.toDays());
-        Period oneWeek = Period.ofWeeks(1);
-        System.out.println(oneWeek.getDays());
-        Period twoYearsSixMonthsOneDay = Period.of(2, 6, 1);
-        System.out.println(twoYearsSixMonthsOneDay.getDays());
-        System.out.println(duration.compareTo(Duration.ofDays(7)));
-        System.out.println(duration.compareTo(Duration.ofHours(59*24)));
-    }
-    @Test
-    public void temporalAdjusterTest(){
-        LocalDate now = LocalDate.now();
-        LocalDate date = now.with(TemporalAdjusters.dayOfWeekInMonth(1,DayOfWeek.MONDAY));
-        System.out.println(date);
-        LocalDateTime todayNoon = LocalDateTime.of(LocalDate.now(),LocalTime.NOON);
-        ZoneId zone = ZoneId.systemDefault();
-        Instant instant = todayNoon.atZone(zone).toInstant();
-        long todayNoonMillis = instant.toEpochMilli();
-        long yesterdayNoonMillis = instant.plus(-1,ChronoUnit.DAYS).toEpochMilli();
-        System.out.println(yesterdayNoonMillis);
-    }
-
     //获取时区
     @Test
     public void getZone(){
@@ -137,12 +72,73 @@ public class TimeTest {
 
     //与Date的转换
     @Test
-    public void transform(){
+    public void transformWithDate(){
         //date转 localdatetime
         Date date = new Date();
         LocalDateTime localDateTime = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
         //localdatetime转date
         Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant());
     }
+
+    //时间戳与localdatetime转换
+    @Test
+    public void transformWithTimestamp(){
+        //秒级时间戳
+        long timeStamp = LocalDateTime.now().toEpochSecond(ZoneOffset.ofHours(8));
+        System.out.println(timeStamp);
+        timeStamp = LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant().getEpochSecond();
+        System.out.println(timeStamp);
+        System.out.println(Instant.ofEpochSecond(timeStamp).atZone(ZoneId.systemDefault()).toLocalDateTime());
+        //毫秒级时间戳
+        timeStamp = LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+        System.out.println(timeStamp);
+        System.out.println(Instant.ofEpochMilli(timeStamp).atZone(ZoneId.systemDefault()).toLocalDateTime());
+    }
+    //时间调整到特定某天
+    @Test
+    public void adjust(){
+        LocalDateTime now = LocalDateTime.now();
+        System.out.println(now);
+        //同月的第一天
+        LocalDateTime firstDayInSameMonthOfNow = now.withDayOfMonth(1);
+        System.out.println(firstDayInSameMonthOfNow);
+        //同年的第一天
+        LocalDateTime firstDayInSameYearOfNow = now.withDayOfYear(1);
+        System.out.println(firstDayInSameYearOfNow);
+        //同年的第2月第10天
+        LocalDateTime time = now.withMonth(2).withDayOfMonth(10);
+        System.out.println(time);
+        //当天的6点整
+        time = now.withHour(6).withMinute(0).withSecond(0).withNano(0);
+        System.out.println(time);
+    }
+    //时间间隔
+    @Test
+    public void duration(){
+        String durationStr;
+        //秒级时间戳
+        long time = 1L;
+        LocalDateTime date = LocalDateTime.ofEpochSecond(time,0, ZoneOffset.ofHours(8));
+        LocalDateTime now = LocalDateTime.now();
+        Duration duration = Duration.between(date,now);
+        TemporalAdjusters.firstDayOfYear();
+        LocalDateTime firstDayInThisYear =now.withDayOfYear(1);
+        if (date.isBefore(firstDayInThisYear)){
+            durationStr = date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+        }else if (duration.compareTo(Duration.ofDays(3))>=0){
+            durationStr = date.format(DateTimeFormatter.ofPattern("MM-dd HH:mm"));
+        }else if (duration.compareTo(Duration.ofDays(1))>=0){
+            durationStr = duration.toDays()+"天前";
+        }else if (duration.compareTo(Duration.ofHours(1))>=0){
+            durationStr = duration.toHours()+"小时前";
+        }else if (duration.compareTo(Duration.ofMinutes(10))>=0){
+            durationStr = duration.toMinutes()+"分钟前";
+        }else {
+            durationStr = "刚刚";
+        }
+        System.out.println(durationStr);
+    }
+
+
 }
 
