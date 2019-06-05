@@ -15,14 +15,14 @@ import org.junit.Test;
 
 public class AddTwoNumbers {
     @Test
-    public void addTest(){
+    public void addTest() {
         ListNode a = new ListNode(2);
         ListNode b = new ListNode(2);
         ListNode c = new ListNode(3);
         ListNode d = new ListNode(4);
-        a.next=b;
-        b.next=c;
-        c.next=d;
+        a.next = b;
+        b.next = c;
+        c.next = d;
 
         ListNode e = new ListNode(4);
         ListNode f = new ListNode(9);
@@ -30,22 +30,22 @@ public class AddTwoNumbers {
         ListNode h = new ListNode(9);
         ListNode i = new ListNode(9);
         ListNode j = new ListNode(9);
-        e.next=f;
+        e.next = f;
         f.next = g;
         g.next = h;
         h.next = i;
         i.next = j;
         print(a);
         print(e);
-        print(addTwoNumbers(a,e));
+        print(addTwoNumbers(a, e));
 
     }
 
     public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
-        if (l1==null){
+        if (l1 == null) {
             return l2;
         }
-        if (l2 == null){
+        if (l2 == null) {
             return l1;
         }
         ListNode rl1 = reverse(l1);
@@ -53,53 +53,52 @@ public class AddTwoNumbers {
         ListNode head = new ListNode(0);
         ListNode tail = head;
         ListNode node;
-        while (rl1!=null&& rl2!=null){
-            node = new ListNode(rl1.val+rl2.val);
+        int n, m, sum;
+        m = 0;
+        while (rl1 != null && rl2 != null) {
+            sum = rl1.val + rl2.val + m;
+            m = sum / 10;
+            n = sum % 10;
+            node = new ListNode(n);
             tail.next = node;
             tail = tail.next;
             rl1 = rl1.next;
             rl2 = rl2.next;
 
         }
-        ListNode notNull = rl1==null?rl2:rl1;
-        while (notNull!=null){
-            node = new ListNode(notNull.val);
+        ListNode notNull = rl1 == null ? rl2 : rl1;
+        while (notNull != null) {
+            sum = notNull.val + m;
+            m = sum / 10;
+            n = sum % 10;
+            node = new ListNode(n);
             tail.next = node;
             tail = tail.next;
             notNull = notNull.next;
         }
-        head = head.next;
-        ListNode i = head;
-        while (i!=null){
-            if (i.val>9){
-                int m = i.val/10;
-                int n = i.val%10;
-                if (i.next == null){
-                    i.next = new ListNode(m);
-                }else {
-                    i.next.val+=m;
-                }
-                i.val = n;
-            }
-            i = i.next;
+        if (m != 0) {
+            tail.next = new ListNode(m);
         }
+        head = head.next;
         return reverse(head);
     }
-    public ListNode reverse(ListNode l){
-        ListNode head =null;
+
+    public ListNode reverse(ListNode l) {
+        ListNode head = null;
         ListNode i = l;
-        while (i!=null){
+        while (i != null) {
             ListNode node = new ListNode(i.val);
-            node.next=head;
+            node.next = head;
             head = node;
             i = i.next;
         }
         return head;
     }
-    public void print(ListNode l){
+
+    public void print(ListNode l) {
         System.out.println();
-        for(ListNode i = l;i!=null;i=i.next){
-            System.out.print(i.val+" ");
+        for (ListNode i = l; i != null; i = i.next) {
+            System.out.print(i.val + " ");
         }
         System.out.println();
     }
@@ -108,7 +107,7 @@ public class AddTwoNumbers {
 class ListNode {
     int val;
     ListNode next;
-    ListNode(int x){
+    ListNode(int x) {
         val = x;
         next = null;
     }
