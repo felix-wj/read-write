@@ -11,6 +11,54 @@ import org.junit.Test;
  **/
 @Slf4j
 public class FindMedianInTwoSortedArrays {
+    public double findMedianSortedArrays2(int[] nums1, int[] nums2) {
+        if (nums1.length > nums2.length) {
+            int[] temp = nums1;
+            nums1 = nums2;
+            nums2 = temp;
+        }
+        if (nums1.length == 0) {
+            if (nums2.length % 2 == 1) {
+                return nums2[nums2.length / 2];
+            } else {
+                return (nums2[nums2.length / 2] + nums2[nums2.length / 2 - 1]) / 2.0D;
+            }
+        }
+        int i,j,half = (nums1.length+nums2.length+1)/2;
+        int iMax = nums1.length,iMin = 0;
+        while(true){
+            i = (iMin+iMax)/2;
+            j=half-i;
+            if (i>0&&nums1[i-1]>nums2[j]){
+                iMax--;
+                continue;
+            }
+            if (i<nums1.length&&nums2[j-1]>nums1[i]){
+                iMin++;
+                continue;
+            }
+            break;
+        }
+        int left, right;
+        if (i == 0) {
+            left = nums2[j - 1];
+        } else if (j == 0) {
+            left = nums1[i - 1];
+        } else {
+            left = Math.max(nums1[i - 1], nums2[j - 1]);
+        }
+        if ((nums1.length + nums2.length) % 2 == 1) {
+            return left;
+        }
+        if (i == nums1.length) {
+            right = nums2[j];
+        } else if (j == nums2.length) {
+            right = nums1[i];
+        } else {
+            right = Math.min(nums1[i], nums2[j]);
+        }
+        return (left + right) / 2.0D;
+    }
     public double findMedianSortedArrays(int[] nums1, int[] nums2) {
         if (nums1.length > nums2.length) {
             int[] temp = nums1;
@@ -64,11 +112,11 @@ public class FindMedianInTwoSortedArrays {
     public void test() {
         int[] num1 = {1, 2, 3};
         int[] num2 = {2, 5, 7, 9};
-        System.out.println(findMedianSortedArrays(num1, num2));
+        System.out.println(findMedianSortedArrays2(num1, num2));
         int[] num3 = {1,2};
         int[] num4 = {3,4};
-        System.out.println(findMedianSortedArrays(num3, num4));
+        System.out.println(findMedianSortedArrays2(num3, num4));
         int[] num5 = {};
-        System.out.println(findMedianSortedArrays(num5, num4));
+        System.out.println(findMedianSortedArrays2(num5, num4));
     }
 }
