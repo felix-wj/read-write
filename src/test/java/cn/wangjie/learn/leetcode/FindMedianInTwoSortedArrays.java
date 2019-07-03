@@ -27,7 +27,7 @@ public class FindMedianInTwoSortedArrays {
         int i,j,half = (nums1.length+nums2.length+1)/2;
         int iMax = nums1.length,iMin = 0;
         while(true){
-            i = (iMin+iMax)/2;
+            i = (iMin+iMax+1)/2;
             j=half-i;
             if (i>0&&nums1[i-1]>nums2[j]){
                 iMax--;
