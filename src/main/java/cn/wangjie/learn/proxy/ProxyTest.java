@@ -3,6 +3,9 @@ package cn.wangjie.learn.proxy;
 
 import org.springframework.cglib.core.DebuggingClassWriter;
 
+import java.io.File;
+import java.net.URL;
+
 /**
  * @program: learn
  * @description:
@@ -18,7 +21,19 @@ public class ProxyTest {
         UserService proxyUserService = (UserService)new LogHandlerJdkDynamicProxy().getInstance(userService);
         proxyUserService.print();
 
+        URL url = userService.getClass().getClassLoader().getResource("./cn/wangjie/learn");
+/*        File classpath = new File(url.getFile());
 
+        for (File file : classpath.listFiles()) {
+            if (file.isFile()){
+                System.out.println(file.getName());
+            }
+        }*/
+        System.out.println(url.getFile());
         //System.setProperty(DebuggingClassWriter.DEBUG_LOCATION_PROPERTY,this.getClass().)
     }
+
+
+
+
 }
