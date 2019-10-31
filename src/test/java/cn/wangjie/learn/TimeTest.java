@@ -162,6 +162,14 @@ public class TimeTest {
         //下周周二
         with = today.with(MyTemporalAdjuster.dayOfWeekInWeek(0, DayOfWeek.TUESDAY));
         System.out.println(with);
+
+        LocalDate localDate = LocalDate.now();
+        int times = 12;
+        for(int i=0;i<times;i++){
+            Date begin = Date.from(LocalDateTime.of(localDate.with(MyTemporalAdjuster.dayOfWeekInWeek(-(1+i), DayOfWeek.MONDAY)), LocalTime.MIDNIGHT).atZone(ZoneId.systemDefault()).toInstant());
+            Date end = Date.from(LocalDateTime.of(localDate.with(MyTemporalAdjuster.dayOfWeekInWeek(-i, DayOfWeek.MONDAY)), LocalTime.MIDNIGHT).atZone(ZoneId.systemDefault()).toInstant());
+            System.out.println("begin:"+begin+"   end:"+end);
+        }
     }
 
     //自定义时间计算

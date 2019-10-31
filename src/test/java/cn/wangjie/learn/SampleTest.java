@@ -247,6 +247,10 @@ public class SampleTest {
         for (Integer id : ids) {
             System.out.println(id);
         }
-
+    }
+    @Test
+    public void bitSet(){
+        BitSet bitSet = new BitSet(2);
+        bitSet.set(18);
     }
 }
