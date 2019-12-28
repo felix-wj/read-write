@@ -1,13 +1,25 @@
 package cn.wangjie.learn;
 
+import cn.wangjie.learn.entity.Node;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.junit.Test;
+import sun.nio.ch.IOUtil;
 
+import javax.swing.text.html.HTMLEditorKit;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.concurrent.CountDownLatch;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.IntStream;
 
 import static java.util.regex.Pattern.compile;
 
@@ -239,18 +251,177 @@ public class SampleTest {
 
     @Test
     public void test4(){
-        List<Integer> ids = new ArrayList<>();
-        ids.add(1);// 0
-        ids.add(2);//1
-        Integer a =1;
-        ids.remove(1);
-        for (Integer id : ids) {
-            System.out.println(id);
+        String str = "\uD83D\uDC4D\uD83D\uDCAA\uD83C\uDFFB\uD83D\uDE02\uD83D\uDE07";
+        System.out.println(str.substring(0,1));
+        str.codePoints().forEach(System.out::println);
+        String intStreamToString = str.codePoints().skip(100).limit(100).collect(StringBuilder::new,
+                StringBuilder::appendCodePoint, StringBuilder::append)
+                .toString();
+        System.out.println(intStreamToString);
+        System.out.println(subPointString(1,-1,str));
+    }
+
+    public static String subPointString(Integer beginIndex, Integer length,String str){
+        if (str==null||"".equals(str)){
+            return str;
         }
+        IntStream intStream = str.codePoints();
+        if (beginIndex!=null&&beginIndex>0){
+            intStream = intStream.skip(beginIndex);
+        }
+        if (length!=null&&length>0){
+            intStream = intStream.limit(length);
+        }
+        return intStream.collect(StringBuilder::new,StringBuilder::appendCodePoint,StringBuilder::append).toString();
     }
     @Test
     public void bitSet(){
         BitSet bitSet = new BitSet(2);
         bitSet.set(18);
+    }
+
+    @Test
+    public void classTest(){
+        List<Class<?>> primitiveTypes = new ArrayList<>(32);
+
+        Collections.addAll(primitiveTypes, boolean[].class, byte[].class, char[].class,
+                double[].class, float[].class, int[].class, long[].class, short[].class,Boolean.class,boolean.class,Boolean[].class, Node[].class);
+        primitiveTypes.add(void.class);
+        for (Class<?> primitiveType : primitiveTypes) {
+            System.out.println(primitiveType.getName()+"  "+primitiveType);
+        }
+    }
+
+    @Test
+    public void testSplit(){
+        String st = "，美丽，好看，1，，";
+        String[] split = st.split("，");
+        System.out.println(split.length);
+        st = "，美丽，好看，1，，1";
+        split = st.split("，");
+        System.out.println(split.length);
+    }
+
+    class HashCode{
+        private Integer i;
+
+        public Integer getI() {
+            return i;
+        }
+
+        public void setI(Integer i) {
+            this.i = i;
+        }
+        HashCode(){
+
+        }
+
+        public HashCode(Integer i) {
+            this.i = i;
+        }
+    }
+    @Test
+    public void testHashCode(){
+        for (int i = 0; i < 10; i++) {
+            HashCode hashCode = new HashCode();
+//            hashCode.setI(1);
+            System.out.println(hashCode.hashCode());
+        }
+        B b = new B();
+        b.a();
+    }
+    abstract  class A{
+        public void a(){}
+    }
+    class B extends A{
+
+    }
+
+    @Test
+    public void testgeshui() throws IOException {
+        double annualsalary = 60000;
+        int xStep = 1;
+        int annualStep = 1000;
+        System.out.println("年薪      最佳月薪");
+        XSSFWorkbook workbook = new XSSFWorkbook();
+        Sheet outSheet = workbook.createSheet("最佳年薪统计");
+        Row outSheetRow = outSheet.createRow(0);
+        Cell cell = outSheetRow.createCell(0);
+        cell.setCellValue("年薪                    ");
+        cell = outSheetRow.createCell(1);
+        cell.setCellValue("最佳月薪                    ");
+        cell = outSheetRow.createCell(2);
+        cell.setCellValue("年终奖                    ");
+        int i =1 ;
+        while (annualsalary<1300000){
+            outSheetRow = outSheet.createRow(i);
+            double x =  5000;
+            double fx = handler(x);
+            double gx = handler2(annualsalary-12*x);
+            double GX = fx+gx;
+            double maxX = annualsalary/12;
+            double bestX = x;
+            double minGX = GX;
+            while (x+xStep<maxX){
+                x += xStep;
+                 fx = handler(x);
+                 gx = handler2(annualsalary-12*x);
+                 GX = fx+gx;
+                 if (GX<minGX){
+                     bestX = x;
+                     minGX = GX;
+                 }
+            }
+            System.out.println(annualsalary+"       "+Math.round(x));
+            outSheetRow.createCell(0).setCellValue((int)annualsalary);
+            outSheetRow.createCell(1).setCellValue((int)Math.round(bestX));
+            outSheetRow.createCell(2).setCellValue((int)annualsalary-(int)Math.round(bestX*12));
+            annualsalary+=annualStep;
+            i++;
+        }
+        OutputStream outputStream = new FileOutputStream("年薪月薪对照.xlsx");
+        workbook.write(outputStream);
+    }
+
+    private double handler2(double y ){
+        double x= y/12;
+        if (x<=3000){
+            return y*0.03;
+        }else if (x<=12000){
+            return y*0.1-210;
+        }else if (x<=25000){
+            return y*0.2-1410;
+        }else if (x<=35000){
+            return y*0.25-2660;
+        }else if (x<=55000){
+            return y*0.3-4410;
+        }else if(x<=80000){
+            return 0.35*y-7160;
+        }else {
+            return 0.45*y-15160;
+        }
+    }
+
+
+    private double handler(double x ){
+        double fx = 0;
+        if (x<=5000){
+            fx = 0;
+        }else if (x<=8000){
+            fx = 12*(x-5000)*0.03;
+        }else if (x<=17000){
+            fx = 12*( (8000-5000)*0.03+(x-8000)*0.1 );
+        }else if (x<=30000){
+            fx = 12*( (8000-5000)*0.03+(17000-8000)*0.1+(x-17000)*0.2 );
+        }else if (x<=40000){
+            fx = 12*( (8000-5000)*0.03+(17000-8000)*0.1+(30000-17000)*0.2 + (x-30000)*0.25 );
+        }else if(x<=60000){
+            fx = 12*( (8000-5000)*0.03+(17000-8000)*0.1+(30000-17000)*0.2+(40000-30000)*0.25 + (x-40000)*0.3 );
+        }else if (x<=85000){
+            fx = 12*( (8000-5000)*0.03+(17000-8000)*0.1+(30000-17000)*0.2+(40000-30000)*0.25 + (60000-40000)*0.3 +(x-60000)*0.35 );
+        }else {
+            fx = 12*( (8000-5000)*0.03+(17000-8000)*0.1+(30000-17000)*0.2+(40000-30000)*0.25 + (60000-40000)*0.3 +(85000-60000)*0.35+(x-85000)*0.45);
+        }
+        return fx;
     }
 }
