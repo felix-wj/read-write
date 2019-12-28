@@ -1,20 +1,16 @@
 package cn.wangjie.learn;
 
 import cn.wangjie.learn.entity.Node;
-import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.junit.Test;
-import sun.nio.ch.IOUtil;
 
-import javax.swing.text.html.HTMLEditorKit;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.math.BigDecimal;
 import java.util.*;
 import java.util.concurrent.CountDownLatch;
 import java.util.regex.Matcher;
@@ -95,7 +91,8 @@ public class SampleTest {
         System.out.println(65535 >>> 16);
 
     }
-    String str="<h1>如果说</h1><p><br/></p><h1>你是最美的烟火海鸥岛据我看到那会滴啊面小孩点击安慕希不能改哈的就</h1><p><br/></p><p>\n" +
+
+    String str = "<h1>如果说</h1><p><br/></p><h1>你是最美的烟火海鸥岛据我看到那会滴啊面小孩点击安慕希不能改哈的就</h1><p><br/></p><p>\n" +
             "    逝去历史的在岁月中从容逝去，我们在书海中遨游终究不如亲自用脚步去丈量这段时光的跨度。</p><p>\n" +
             "    翻开历史的册页，在那些浩如烟海的典籍中找寻，我们发现，古道，作为古人运往行来之途，脚下是历史的呼唤，耳边是宇宙的呢喃，过往与未来在此刻交汇。</p><p>{document}70{/document}</p><p>\n" +
             "    刚和我爱的厚爱现货金爱都会<br/></p><p>{document}165{/document}</p><p>喜欢吗<br/></p><p>{product}24731{/product}</p><p><br/></p><p>\n" +
@@ -182,8 +179,9 @@ public class SampleTest {
             "<p>{/tips}</p><p><br/></p><p>黄山屯溪国际机场</p><p>地址：黄山市屯溪区奕棋镇龙井8号</p><p>到屯溪老街约5km，打车约20元；到汤口约60km打车约150元。</p><p>\n" +
             "    公交线路：18路/19路</p><p>机场大巴：机场—市区<br/>运行时间：随航班运行<br/>运行路线：机场（起点站）→国际大酒店→民航售票处→一马路[延安路]→二马路[延安路]→三马路[延安路]→横江桥[西海路]→商贸城→昱中花园（终点站）原路返回\n" +
             "</p><p><img src=\"http://qimg4.youxiake.com/15543599715.png\"/></p><p class='tet'><br/></p>";
+
     @Test
-    public void setTest(){
+    public void setTest() {
         String str = "</p><p><img src=\"http://qimg4.youxiake.com/15543599715.png\"/></p><p ><br/></p>";
         Pattern patterns = compile("<([^>]*)?>");
         Matcher matcher = patterns.matcher(str);
@@ -191,46 +189,47 @@ public class SampleTest {
         while (matcher.find()) {
             list.add(matcher.group());
         }
-        for(String tag : list){
-            if (!(tag.contains("<br/")||tag.contains("</")||tag.contains("class"))) {
+        for (String tag : list) {
+            if (!(tag.contains("<br/") || tag.contains("</") || tag.contains("class"))) {
                 log.info("处理前:{}", tag);
                 String t = new String(tag);
 
                 t = t.replaceAll("\\W", " ");
                 t = t.trim().split(" ")[0];
                 String target = ">";
-                if (tag.contains("/>")){
-                    target="/>";
+                if (tag.contains("/>")) {
+                    target = "/>";
                 }
-                t = " class='" + t + "' "+target;
+                t = " class='" + t + "' " + target;
                 tag = tag.replace(target, t);
                 log.info("处理后:{}", tag);
             }
         }
     }
-//(<p><span style="font-size: 14px;">)?
+
+    //(<p><span style="font-size: 14px;">)?
     @Test
-    public void setTest2(){
-        String str =  "<span style=\"font-size: 14px;\">{tips}</span></p><p style=\"font-size: 14px;\">请输入小贴士内容</p><p>{/tips}</p>";
+    public void setTest2() {
+        String str = "<span style=\"font-size: 14px;\">{tips}</span></p><p style=\"font-size: 14px;\">请输入小贴士内容</p><p>{/tips}</p>";
         Pattern patterns = compile("(<p><span style=\"font-size: 14px;\">)?\\{tips\\}(.*?)\\{/tips\\}(</p>)?");
         Matcher matcher = patterns.matcher(str);
         List<String> list = new LinkedList<String>();
         while (matcher.find()) {
             list.add(matcher.group());
         }
-        for(String tag : list){
+        for (String tag : list) {
             System.out.println(tag);
-            if (!(tag.contains("<br/")||tag.contains("</")||tag.contains("class"))) {
+            if (!(tag.contains("<br/") || tag.contains("</") || tag.contains("class"))) {
                 log.info("处理前:{}", tag);
                 String t = new String(tag);
 
                 t = t.replaceAll("\\W", " ");
                 t = t.trim().split(" ")[0];
                 String target = ">";
-                if (tag.contains("/>")){
-                    target="/>";
+                if (tag.contains("/>")) {
+                    target = "/>";
                 }
-                t = " class='" + t + "' "+target;
+                t = " class='" + t + "' " + target;
 
                 tag = tag.replace(target, t);
                 log.info("处理后:{}", tag);
@@ -239,61 +238,61 @@ public class SampleTest {
     }
 
 
-
     @Test
     public void setTest3() {
-        String str ="http://qimg5.youxiake.com/app/201908/16/origin/video_img/NjY1MDg0.jpg?imageView2/0/w/400/q/90";
+        String str = "http://qimg5.youxiake.com/app/201908/16/origin/video_img/NjY1MDg0.jpg?imageView2/0/w/400/q/90";
 
-        str = str.replaceAll("\\?imageView(.*)","");
+        str = str.replaceAll("\\?imageView(.*)", "");
         System.out.println(str);
 
     }
 
     @Test
-    public void test4(){
+    public void test4() {
         String str = "\uD83D\uDC4D\uD83D\uDCAA\uD83C\uDFFB\uD83D\uDE02\uD83D\uDE07";
-        System.out.println(str.substring(0,1));
+        System.out.println(str.substring(0, 1));
         str.codePoints().forEach(System.out::println);
         String intStreamToString = str.codePoints().skip(100).limit(100).collect(StringBuilder::new,
                 StringBuilder::appendCodePoint, StringBuilder::append)
                 .toString();
         System.out.println(intStreamToString);
-        System.out.println(subPointString(1,-1,str));
+        System.out.println(subPointString(1, -1, str));
     }
 
-    public static String subPointString(Integer beginIndex, Integer length,String str){
-        if (str==null||"".equals(str)){
+    public static String subPointString(Integer beginIndex, Integer length, String str) {
+        if (str == null || "".equals(str)) {
             return str;
         }
         IntStream intStream = str.codePoints();
-        if (beginIndex!=null&&beginIndex>0){
+        if (beginIndex != null && beginIndex > 0) {
             intStream = intStream.skip(beginIndex);
         }
-        if (length!=null&&length>0){
+        if (length != null && length > 0) {
             intStream = intStream.limit(length);
         }
-        return intStream.collect(StringBuilder::new,StringBuilder::appendCodePoint,StringBuilder::append).toString();
+        return intStream.collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append).toString();
     }
+
     @Test
-    public void bitSet(){
+    public void bitSet() {
         BitSet bitSet = new BitSet(2);
         bitSet.set(18);
     }
 
     @Test
-    public void classTest(){
+    public void classTest() {
         List<Class<?>> primitiveTypes = new ArrayList<>(32);
 
         Collections.addAll(primitiveTypes, boolean[].class, byte[].class, char[].class,
-                double[].class, float[].class, int[].class, long[].class, short[].class,Boolean.class,boolean.class,Boolean[].class, Node[].class);
+                double[].class, float[].class, int[].class, long[].class, short[].class, Boolean.class, boolean.class, Boolean[].class, Node[].class);
         primitiveTypes.add(void.class);
         for (Class<?> primitiveType : primitiveTypes) {
-            System.out.println(primitiveType.getName()+"  "+primitiveType);
+            System.out.println(primitiveType.getName() + "  " + primitiveType);
         }
     }
 
     @Test
-    public void testSplit(){
+    public void testSplit() {
         String st = "，美丽，好看，1，，";
         String[] split = st.split("，");
         System.out.println(split.length);
@@ -302,7 +301,7 @@ public class SampleTest {
         System.out.println(split.length);
     }
 
-    class HashCode{
+    class HashCode {
         private Integer i;
 
         public Integer getI() {
@@ -312,7 +311,8 @@ public class SampleTest {
         public void setI(Integer i) {
             this.i = i;
         }
-        HashCode(){
+
+        HashCode() {
 
         }
 
@@ -320,8 +320,9 @@ public class SampleTest {
             this.i = i;
         }
     }
+
     @Test
-    public void testHashCode(){
+    public void testHashCode() {
         for (int i = 0; i < 10; i++) {
             HashCode hashCode = new HashCode();
 //            hashCode.setI(1);
@@ -330,19 +331,25 @@ public class SampleTest {
         B b = new B();
         b.a();
     }
-    abstract  class A{
-        public void a(){}
+
+    abstract class A {
+        public void a() {
+        }
     }
-    class B extends A{
+
+    class B extends A {
 
     }
 
     @Test
-    public void testgeshui() throws IOException {
-        double annualsalary = 60000;
+    public void calculateTax() throws IOException {
+        double annualsalary = 120000;
+        //月薪资步进幅度
         int xStep = 1;
+        //年薪步进幅度
         int annualStep = 1000;
         System.out.println("年薪      最佳月薪");
+        // 准备存储数据的excel
         XSSFWorkbook workbook = new XSSFWorkbook();
         Sheet outSheet = workbook.createSheet("最佳年薪统计");
         Row outSheetRow = outSheet.createRow(0);
@@ -352,75 +359,94 @@ public class SampleTest {
         cell.setCellValue("最佳月薪                    ");
         cell = outSheetRow.createCell(2);
         cell.setCellValue("年终奖                    ");
-        int i =1 ;
-        while (annualsalary<1300000){
+        int i = 1;
+        while (annualsalary < 2000000) {
             outSheetRow = outSheet.createRow(i);
-            double x =  5000;
-            double fx = handler(x);
-            double gx = handler2(annualsalary-12*x);
-            double GX = fx+gx;
-            double maxX = annualsalary/12;
+            //起始计算薪资
+            double x = 5000;
+            //计算月薪个人所得税f(x)
+            double fx = calculateIncomeTax(x);
+            //计算年终奖扣税额个g(x)
+            double gx = calculateBonusTax(annualsalary - 12 * x);
+            //总缴税额
+            double GX = 12*fx + gx;
+            //当前年薪下最大月薪
+            double maxX = annualsalary / 12;
+            //最符合月薪，初始假定为5000
             double bestX = x;
+            //最小总缴税额
             double minGX = GX;
-            while (x+xStep<maxX){
+            //递增月薪直到月薪大于最大月薪
+            while (x + xStep <=maxX) {
                 x += xStep;
-                 fx = handler(x);
-                 gx = handler2(annualsalary-12*x);
-                 GX = fx+gx;
-                 if (GX<minGX){
-                     bestX = x;
-                     minGX = GX;
-                 }
+                //新月薪对应的月薪个人所得税f(x)
+                fx = calculateIncomeTax(x);
+                //新月薪对应的年终奖扣税额g(x)
+                gx = calculateBonusTax(annualsalary - 12 * x);
+                GX = 12*fx + gx;
+                //如果新月薪对应的总扣税额更小，那么更新最符合月薪和最小总缴税额的记录
+                if (GX < minGX) {
+                    bestX = x;
+                    minGX = GX;
+                }
             }
-            System.out.println(annualsalary+"       "+Math.round(x));
-            outSheetRow.createCell(0).setCellValue((int)annualsalary);
-            outSheetRow.createCell(1).setCellValue((int)Math.round(bestX));
-            outSheetRow.createCell(2).setCellValue((int)annualsalary-(int)Math.round(bestX*12));
-            annualsalary+=annualStep;
+            System.out.println(annualsalary + "       " + Math.round(x));
+            //将该年薪对应的最符合月薪和最小缴税额记录到excel
+            outSheetRow.createCell(0).setCellValue((int) annualsalary);
+            outSheetRow.createCell(1).setCellValue((int) Math.round(bestX));
+            outSheetRow.createCell(2).setCellValue((int) annualsalary - (int) Math.round(bestX * 12));
+            //步进年薪
+            annualsalary += annualStep;
             i++;
         }
+        //将excel写入文件
         OutputStream outputStream = new FileOutputStream("年薪月薪对照.xlsx");
         workbook.write(outputStream);
     }
 
-    private double handler2(double y ){
-        double x= y/12;
-        if (x<=3000){
-            return y*0.03;
-        }else if (x<=12000){
-            return y*0.1-210;
-        }else if (x<=25000){
-            return y*0.2-1410;
-        }else if (x<=35000){
-            return y*0.25-2660;
-        }else if (x<=55000){
-            return y*0.3-4410;
-        }else if(x<=80000){
-            return 0.35*y-7160;
-        }else {
-            return 0.45*y-15160;
+    //计算年终奖对应缴税额
+    private double calculateBonusTax(double bonus) {
+        double x = bonus / 12;
+        if (x <= 3000) {
+            return bonus * 0.03;
         }
+        if (x <= 12000) {
+            return bonus * 0.1 - 210;
+        }
+        if (x <= 25000) {
+            return bonus * 0.2 - 1410;
+        }
+        if (x <= 35000) {
+            return bonus * 0.25 - 2660;
+        }
+        if (x <= 55000) {
+            return bonus * 0.3 - 4410;
+        }
+        if (x <= 80000) {
+            return 0.35 * bonus - 7160;
+        }
+        return 0.45 * bonus - 15160;
     }
 
-
-    private double handler(double x ){
+    //计算月薪对应缴税额
+    private double calculateIncomeTax(double x) {
         double fx = 0;
-        if (x<=5000){
+        if (x <= 5000) {
             fx = 0;
-        }else if (x<=8000){
-            fx = 12*(x-5000)*0.03;
-        }else if (x<=17000){
-            fx = 12*( (8000-5000)*0.03+(x-8000)*0.1 );
-        }else if (x<=30000){
-            fx = 12*( (8000-5000)*0.03+(17000-8000)*0.1+(x-17000)*0.2 );
-        }else if (x<=40000){
-            fx = 12*( (8000-5000)*0.03+(17000-8000)*0.1+(30000-17000)*0.2 + (x-30000)*0.25 );
-        }else if(x<=60000){
-            fx = 12*( (8000-5000)*0.03+(17000-8000)*0.1+(30000-17000)*0.2+(40000-30000)*0.25 + (x-40000)*0.3 );
-        }else if (x<=85000){
-            fx = 12*( (8000-5000)*0.03+(17000-8000)*0.1+(30000-17000)*0.2+(40000-30000)*0.25 + (60000-40000)*0.3 +(x-60000)*0.35 );
-        }else {
-            fx = 12*( (8000-5000)*0.03+(17000-8000)*0.1+(30000-17000)*0.2+(40000-30000)*0.25 + (60000-40000)*0.3 +(85000-60000)*0.35+(x-85000)*0.45);
+        } else if (x <= 8000) {
+            fx = (x - 5000) * 0.03;
+        } else if (x <= 17000) {
+            fx = (8000 - 5000) * 0.03 + (x - 8000) * 0.1;
+        } else if (x <= 30000) {
+            fx = (8000 - 5000) * 0.03 + (17000 - 8000) * 0.1 + (x - 17000) * 0.2;
+        } else if (x <= 40000) {
+            fx = (8000 - 5000) * 0.03 + (17000 - 8000) * 0.1 + (30000 - 17000) * 0.2 + (x - 30000) * 0.25;
+        } else if (x <= 60000) {
+            fx = (8000 - 5000) * 0.03 + (17000 - 8000) * 0.1 + (30000 - 17000) * 0.2 + (40000 - 30000) * 0.25 + (x - 40000) * 0.3;
+        } else if (x <= 85000) {
+            fx = (8000 - 5000) * 0.03 + (17000 - 8000) * 0.1 + (30000 - 17000) * 0.2 + (40000 - 30000) * 0.25 + (60000 - 40000) * 0.3 + (x - 60000) * 0.35;
+        } else {
+            fx = (8000 - 5000) * 0.03 + (17000 - 8000) * 0.1 + (30000 - 17000) * 0.2 + (40000 - 30000) * 0.25 + (60000 - 40000) * 0.3 + (85000 - 60000) * 0.35 + (x - 85000) * 0.45;
         }
         return fx;
     }
