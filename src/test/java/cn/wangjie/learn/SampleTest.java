@@ -343,25 +343,13 @@ public class SampleTest {
 
     @Test
     public void calculateTax() throws IOException {
-        double annualsalary = 120000;
+        double annualsalary = 6000;
         //月薪资步进幅度
         int xStep = 1;
         //年薪步进幅度
         int annualStep = 1000;
         System.out.println("年薪      最佳月薪");
-        // 准备存储数据的excel
-        XSSFWorkbook workbook = new XSSFWorkbook();
-        Sheet outSheet = workbook.createSheet("最佳年薪统计");
-        Row outSheetRow = outSheet.createRow(0);
-        Cell cell = outSheetRow.createCell(0);
-        cell.setCellValue("年薪                    ");
-        cell = outSheetRow.createCell(1);
-        cell.setCellValue("最佳月薪                    ");
-        cell = outSheetRow.createCell(2);
-        cell.setCellValue("年终奖                    ");
-        int i = 1;
         while (annualsalary < 2000000) {
-            outSheetRow = outSheet.createRow(i);
             //起始计算薪资
             double x = 5000;
             //计算月薪个人所得税f(x)
@@ -390,20 +378,11 @@ public class SampleTest {
                     minGX = GX;
                 }
             }
-            System.out.println(annualsalary + "       " + Math.round(x));
-            //将该年薪对应的最符合月薪和最小缴税额记录到excel
-            outSheetRow.createCell(0).setCellValue((int) annualsalary);
-            outSheetRow.createCell(1).setCellValue((int) Math.round(bestX));
-            outSheetRow.createCell(2).setCellValue((int) annualsalary - (int) Math.round(bestX * 12));
+            System.out.println(annualsalary + "       " + Math.round(bestX));
             //步进年薪
             annualsalary += annualStep;
-            i++;
         }
-        //将excel写入文件
-        OutputStream outputStream = new FileOutputStream("年薪月薪对照.xlsx");
-        workbook.write(outputStream);
     }
-
     //计算年终奖对应缴税额
     private double calculateBonusTax(double bonus) {
         double x = bonus / 12;
@@ -427,7 +406,6 @@ public class SampleTest {
         }
         return 0.45 * bonus - 15160;
     }
-
     //计算月薪对应缴税额
     private double calculateIncomeTax(double x) {
         double fx = 0;
@@ -436,17 +414,17 @@ public class SampleTest {
         } else if (x <= 8000) {
             fx = (x - 5000) * 0.03;
         } else if (x <= 17000) {
-            fx = (8000 - 5000) * 0.03 + (x - 8000) * 0.1;
+            fx = (x - 5000) * 0.1-210;
         } else if (x <= 30000) {
-            fx = (8000 - 5000) * 0.03 + (17000 - 8000) * 0.1 + (x - 17000) * 0.2;
+            fx = (x - 5000) * 0.2-1440;
         } else if (x <= 40000) {
-            fx = (8000 - 5000) * 0.03 + (17000 - 8000) * 0.1 + (30000 - 17000) * 0.2 + (x - 30000) * 0.25;
+            fx = (x - 5000) * 0.25-2660;
         } else if (x <= 60000) {
-            fx = (8000 - 5000) * 0.03 + (17000 - 8000) * 0.1 + (30000 - 17000) * 0.2 + (40000 - 30000) * 0.25 + (x - 40000) * 0.3;
+            fx = (x - 5000) * 0.3-4410;
         } else if (x <= 85000) {
-            fx = (8000 - 5000) * 0.03 + (17000 - 8000) * 0.1 + (30000 - 17000) * 0.2 + (40000 - 30000) * 0.25 + (60000 - 40000) * 0.3 + (x - 60000) * 0.35;
+            fx = (x - 5000) * 0.35-7160;
         } else {
-            fx = (8000 - 5000) * 0.03 + (17000 - 8000) * 0.1 + (30000 - 17000) * 0.2 + (40000 - 30000) * 0.25 + (60000 - 40000) * 0.3 + (85000 - 60000) * 0.35 + (x - 85000) * 0.45;
+            fx = (x - 5000) * 0.45-15160;
         }
         return fx;
     }
