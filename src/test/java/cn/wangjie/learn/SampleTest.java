@@ -354,4 +354,12 @@ public class SampleTest {
         String percent = format.format(d);
         percent = percent.replace(".0%","%").replace("100%","99.9%");
     }
+
+
+    @Test
+    public  void subString(){
+        String str = "012345";
+        //截取需要判断数组越界情况
+        System.out.println(str.substring(0,20));
+    }
 }
