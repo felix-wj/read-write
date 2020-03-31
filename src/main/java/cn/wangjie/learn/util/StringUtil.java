@@ -39,7 +39,7 @@ public class StringUtil {
      * @Author WangJie
      * @Description 按字节截取字符串
      * @param str 待截取字符串
-     * @param bytes 期望长度
+     * @param bytes 期望长度 >=0
      * @param charSetName 字符串编码
      * @Date  2020/3/31 11:24
      */
@@ -48,12 +48,28 @@ public class StringUtil {
         if (str ==null||str.getBytes(charSetName).length<=bytes){
             return str;
         }
-        byte[] subAfter = ArrayUtils.subarray(str.getBytes(charSetName),0,bytes);
-        int temp = bytes;
+        String subAfter = subPointString(0,bytes,str);
+        int temp = subAfter.length();
         // 直到截取的字符串的字节数 和 需要的 截取的字节数相等位为止
-        while (bytes < subAfter.length) {
-            subAfter = ArrayUtils.subarray(str.getBytes(charSetName),0,--temp);
+        while (bytes < subAfter.getBytes(charSetName).length) {
+            if (temp>1&&Character.isHighSurrogate(subAfter.charAt(temp-2))&&Character.isLowSurrogate(subAfter.charAt(temp-1))){
+                temp-=2;
+            }else {
+                temp--;
+            }
+            subAfter =str.substring(0,temp);
         }
-        return new String(subAfter,charSetName);
+        return subAfter;
+    }
+
+    public static void main(String[] args) throws UnsupportedEncodingException {
+        String str = "a表情\uD83D\uDC4D\uD83D\uDCAA\uD83C\uDFFB\uD83D\uDE02\uD83D\uDE07";
+        System.out.println(subStringSafe(str,0,"UTF-8"));
+        System.out.println(subStringSafe(str,5,"UTF-8"));
+        System.out.println(subStringSafe(str,6,"UTF-8"));
+        System.out.println(subStringSafe(str,8,"UTF-8"));
+        System.out.println(subStringSafe(str,9,"UTF-8"));
+        System.out.println(subStringSafe(str,10,"UTF-8"));
+        System.out.println(subStringSafe(str,100,"UTF-8"));
     }
 }
