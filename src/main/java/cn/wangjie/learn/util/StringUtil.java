@@ -1,7 +1,5 @@
 package cn.wangjie.learn.util;
 
-import org.apache.commons.lang3.ArrayUtils;
-
 import java.io.UnsupportedEncodingException;
 import java.util.stream.IntStream;
 
@@ -64,12 +62,14 @@ public class StringUtil {
 
     public static void main(String[] args) throws UnsupportedEncodingException {
         String str = "a表情\uD83D\uDC4D\uD83D\uDCAA\uD83C\uDFFB\uD83D\uDE02\uD83D\uDE07";
+        System.out.println("按字符长度截取");
+        System.out.println(subPointString(1,1,str));
+        System.out.println(subPointString(3,2,str));
+        System.out.println("按byte长度截取");
         System.out.println(subStringSafe(str,0,"UTF-8"));
         System.out.println(subStringSafe(str,5,"UTF-8"));
         System.out.println(subStringSafe(str,6,"UTF-8"));
-        System.out.println(subStringSafe(str,8,"UTF-8"));
-        System.out.println(subStringSafe(str,9,"UTF-8"));
-        System.out.println(subStringSafe(str,10,"UTF-8"));
+        System.out.println(subStringSafe(str,11,"UTF-8"));
         System.out.println(subStringSafe(str,100,"UTF-8"));
     }
 }
