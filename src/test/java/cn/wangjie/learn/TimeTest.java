@@ -4,6 +4,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.springframework.web.util.HtmlUtils;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.*;
 import java.time.chrono.IsoChronology;
 import java.time.format.*;
@@ -196,6 +198,12 @@ public class TimeTest {
             };
         }
 
+    }
+    @Test
+    public void testDate() throws ParseException {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Date parse = format.parse("2020-02-05");
+        System.out.println(parse.getTime());
     }
 
 
