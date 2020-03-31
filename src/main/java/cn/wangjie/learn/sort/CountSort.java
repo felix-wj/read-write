@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 /**
  * @program: read-write
- * @description: 技数排序，需要值大于0
+ * @description: 计数排序，需要值大于0
  * @author: WangJie
  * @create: 2019-03-02 17:57
  **/

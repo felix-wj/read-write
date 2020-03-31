@@ -5,15 +5,14 @@ import org.junit.Test;
 import org.springframework.web.util.HtmlUtils;
 
 import java.time.*;
-import java.time.format.DateTimeFormatter;
+import java.time.chrono.IsoChronology;
+import java.time.format.*;
 import java.time.temporal.*;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.TimeZone;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static java.time.temporal.ChronoField.DAY_OF_WEEK;
 import static java.util.regex.Pattern.compile;
 
 /**
@@ -43,6 +42,7 @@ public class TimeTest {
         System.out.println(date);
         System.out.println(date.isAfter(LocalDate.now()));
         System.out.println(LocalDate.now().isAfter(LocalDate.now()));
+        System.out.println(LocalDateTime.of(LocalDate.parse("2020-10-07"),LocalTime.parse("15:00")));
 
     }
 
@@ -50,8 +50,10 @@ public class TimeTest {
     @Test
     public void dateToStr() {
         LocalDate today = LocalDate.now();
-        System.out.println(today.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+        System.out.println(today.format(DateTimeFormatter.ofPattern("yyyy-MM-dd EE")));
         System.out.println(today.format(DateTimeFormatter.ofPattern("MM-dd E")));
+        System.out.println(today.format(DateTimeFormatter.ofPattern("MM-dd e")));
+        System.out.println(today.format(DateTimeFormatter.ofPattern("MM-dd ")));
 
         LocalTime time = LocalTime.now();
         //24小时制
@@ -170,6 +172,18 @@ public class TimeTest {
             Date end = Date.from(LocalDateTime.of(localDate.with(MyTemporalAdjuster.dayOfWeekInWeek(-i, DayOfWeek.MONDAY)), LocalTime.MIDNIGHT).atZone(ZoneId.systemDefault()).toInstant());
             System.out.println("begin:"+begin+"   end:"+end);
         }
+    }
+    @Test
+    public void toWeekStr(){
+        LocalDate now = LocalDate.of(2019,1,31);
+        System.out.println(now.format(DateTimeFormatter.ofPattern("MM/dd 周e")));
+        System.out.println("01/24 周4");
+        System.out.println(now.getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.getDefault()));
+        System.out.println(now.getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.getDefault()));
+        System.out.println(now.getDayOfWeek().getDisplayName(TextStyle.FULL_STANDALONE, Locale.getDefault()));
+        System.out.println(now.getDayOfWeek().getDisplayName(TextStyle.NARROW, Locale.getDefault()));
+        System.out.println(now.getDayOfWeek().getDisplayName(TextStyle.SHORT_STANDALONE, Locale.getDefault()));
+        System.out.println(now.getDayOfWeek().getDisplayName(TextStyle.NARROW_STANDALONE, Locale.getDefault()));
     }
 
     //自定义时间计算

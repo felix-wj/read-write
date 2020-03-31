@@ -56,7 +56,7 @@ public class QuickSort {
     /**
      * 快速排序
      *
-     * @param numbers 带排序数组
+     * @param numbers 待排序数组
      */
     public static void quick(int[] numbers) {
         //查看数组是否为空
