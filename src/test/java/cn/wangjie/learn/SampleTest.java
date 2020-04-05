@@ -45,42 +45,6 @@ public class SampleTest {
         b,
         c,
     }
-
-    private volatile int count = 0;
-
-    @Test
-    public void volatileTest() throws InterruptedException {
-        for (int i = 0; i < 20000; i++) {
-            Thread thread = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    count++;
-                }
-            });
-            thread.start();
-        }
-        Thread.sleep(4000L);
-        System.out.println(count);
-    }
-
-    @Test
-    public void volatileTest2() throws InterruptedException {
-        final CountDownLatch done = new CountDownLatch(80000);
-        for (int i = 0; i < 80000; i++) {
-            Thread thread = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    count++;
-                    done.countDown();
-                }
-            });
-            thread.start();
-        }
-        done.await();
-        System.out.println(count);
-
-    }
-
     @Test
     public void shift() {
         int i = 0;
