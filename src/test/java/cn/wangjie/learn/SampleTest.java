@@ -230,6 +230,8 @@ public class SampleTest {
     }
     @Test
     public void testa(){
-
+        Map<String,String> map = new HashMap<>();
+        map.put("1","hah");
+        map.get(null);
     }
 }
