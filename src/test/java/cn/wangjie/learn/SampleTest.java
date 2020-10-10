@@ -1,33 +1,33 @@
 package cn.wangjie.learn;
 
 import cn.wangjie.learn.entity.Node;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONAware;
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.annotation.JSONType;
+import com.google.common.base.Charsets;
+import com.google.common.hash.BloomFilter;
+import com.google.common.hash.Funnels;
+import com.sun.org.apache.bcel.internal.generic.NEW;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.ArrayUtils;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.junit.Test;
+import org.springframework.beans.BeanUtils;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.ZoneId;
+import java.beans.BeanInfo;
+import java.beans.IntrospectionException;
+import java.beans.Introspector;
+import java.beans.PropertyDescriptor;
+import java.io.*;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.*;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static java.util.regex.Pattern.compile;
+import static java.util.regex.Pattern.matches;
 
 /**
  * @program: read-write
@@ -223,15 +223,69 @@ public class SampleTest {
         return perVoteNum;
     }
     @Test
-    public void testArray(){
-        int array[] = new int[10];
-        String[] strs = new String[10];
-        System.out.println(array[1]);
+    public void testArray() {
+        Set<String> s = new HashSet<>();
+        s.add(null);
+        s.add("s");
+        Set<String> t = new HashSet<>();
+        //t.add(null);
+        t.add("s");
+        t.retainAll(s);
+        System.out.println(t.size());
     }
+
     @Test
-    public void testa(){
-        Map<String,String> map = new HashMap<>();
-        map.put("1","hah");
-        map.get(null);
+    public void name() throws IOException {
+
+
+        FileInputStream inputStream = new FileInputStream("txt.txt");
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+        StringBuilder sb = new StringBuilder();
+        String str = null;
+        int i = 1;
+        while ((str = bufferedReader.readLine()) != null) {
+            sb.append("\"" + str + "\",");
+            i++;
+        }
+        System.out.println(i);
+        //close
+        inputStream.close();
+        bufferedReader.close();
+        sb.deleteCharAt(sb.lastIndexOf(","));
+        System.out.println(sb.toString());
+
+    }
+
+    //布隆过滤器
+    @Test
+    public void na() {
+        int total = 100000; // 总数量
+        BloomFilter<String> bf = BloomFilter.create(Funnels.stringFunnel(Charsets.UTF_8), total,0.000001);
+        // 初始化 1000000 条数据到过滤器中
+        for (int i = 0; i < total; i++) {
+            bf.put("" + i);
+        }
+        // 判断值是否存在过滤器中
+        int count = 0;
+        int t = total * 1000;
+        for (int i = 0; i < t; i++) {
+            if (bf.mightContain("" + i)) {
+                count++;
+            }
+        }
+
+        System.out.println("已匹配数量 " + count);
+    }
+
+    @Test
+    public void switchTest() {
+        String name = null;
+        switch (name){
+            case "ss":
+                System.out.println("ss");
+                break;
+            default:
+                System.out.println("nothing");
+        }
     }
 }
