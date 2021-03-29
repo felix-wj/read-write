@@ -2,32 +2,25 @@ package cn.wangjie.learn;
 
 import cn.wangjie.learn.entity.Node;
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONAware;
 import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.annotation.JSONType;
 import com.google.common.base.Charsets;
 import com.google.common.hash.BloomFilter;
 import com.google.common.hash.Funnels;
-import com.sun.org.apache.bcel.internal.generic.NEW;
-import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
-import org.springframework.beans.BeanUtils;
+import org.springframework.util.ObjectUtils;
 
-import java.beans.BeanInfo;
-import java.beans.IntrospectionException;
-import java.beans.Introspector;
-import java.beans.PropertyDescriptor;
+import java.awt.*;
 import java.io.*;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.*;
-import java.util.stream.Collectors;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.IntStream;
 
 import static java.util.regex.Pattern.compile;
-import static java.util.regex.Pattern.matches;
 
 /**
  * @program: read-write
@@ -224,14 +217,14 @@ public class SampleTest {
     }
     @Test
     public void testArray() {
-        Set<String> s = new HashSet<>();
-        s.add(null);
-        s.add("s");
-        Set<String> t = new HashSet<>();
-        //t.add(null);
-        t.add("s");
-        t.retainAll(s);
-        System.out.println(t.size());
+        String s = "587591880726,589077400486,597348669638,592519328987,607699694687,587948407045,587518908799,587470408836,587652981552,594992201495,589701087522,588891235001,588054143414,588346176222,592440092700,588860939232,588268961946,625594830189,628780403698,588106026565,626168222970,588718478764,588588021933,588689224077,615455011268,587969297300,587846834517,587736801800,608054884033,607835754737,593395003750,587377025345,587496860199,593163538285,588725866999,603392314517,628751503599,587499572972,593884863984,587705855042,587551610385,597903889974,607389640477,588715502430,596615586742,601216413201,601609059683,628854287394,627934732628,627850268489,587756128136,587757712033,587757940270,587974565525,595065766574,628485882299,594166653974,592063098620,611307733978\t";
+        String a = "587591880726";
+        String[] split = s.split(",");
+
+        List<String> strings = Arrays.asList(split);
+        log.info(strings.toString());
+        log.info("set:{}",new HashSet<>(strings));
+        System.out.println(String.format("%s",null));
     }
 
     @Test
@@ -276,16 +269,55 @@ public class SampleTest {
 
         System.out.println("已匹配数量 " + count);
     }
+    static Class<?> comparableClassFor(Object x) {
+        if (x instanceof Comparable) {
+            Class<?> c; Type[] ts, as; Type t; ParameterizedType p;
+            c = x.getClass();
+        /*    if ((c = x.getClass()) == String.class) // bypass checks
+                return c;*/
+            if ((ts = c.getGenericInterfaces()) != null) {
+                for (int i = 0; i < ts.length; ++i) {
+                    if (((t = ts[i]) instanceof ParameterizedType) &&
+                            ((p = (ParameterizedType)t).getRawType() ==
+                                    Comparable.class) &&
+                            (as = p.getActualTypeArguments()) != null &&
+                            as.length == 1 && as[0] == c) // type arg is c
+                        return c;
+                }
+            }
+        }
+        return null;
+    }
 
     @Test
-    public void switchTest() {
-        String name = null;
-        switch (name){
-            case "ss":
-                System.out.println("ss");
-                break;
-            default:
-                System.out.println("nothing");
+    public void main() {
+      /*  Map<String, String> map = new HashMap<>();
+        map.put("1",null);
+        System.out.println(map.size());
+        System.out.println(map.keySet());
+        System.out.println(map.values());
+        map.entrySet().forEach(e-> System.out.println(e.getKey()+e.getValue())
+        );
+        String s = map.get(null);
+        System.out.println(s);*/
+        /*PayStatus ss = PayStatus.
+        System.out.println(ss);*/
+/*
+        int[]a=new int[1];
+        for(int i = 0; i < 200000; i++) {
+            try {
+                System.out.println(a[1]);
+            } catch (Exception e) {
+                System.out.println(i + ":" + e.getStackTrace().length);
+                if (e.getStackTrace().length == 0) {
+                    System.out.println("stackTrace omit after " + i + " times");
+                    throw e;
+                }
+            }
         }
+*/
+        String str = "{\"x\":\"10\"}";
+        JSONObject jsonObject = JSONObject.parseObject(str);
+        System.out.println(jsonObject.getInteger("x"));
     }
 }
