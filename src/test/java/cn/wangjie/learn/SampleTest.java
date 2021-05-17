@@ -1,6 +1,11 @@
 package cn.wangjie.learn;
 
 import cn.wangjie.learn.entity.Node;
+import cn.wangjie.learn.entity.Room;
+import cn.wangjie.learn.entity.User;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.poi.ss.usermodel.Cell;
@@ -9,10 +14,16 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.junit.Test;
 
+import java.beans.BeanInfo;
+import java.beans.Introspector;
+import java.beans.PropertyDescriptor;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.lang.reflect.Method;
+import java.lang.reflect.Type;
 import java.math.RoundingMode;
+import java.text.CharacterIterator;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.time.LocalDate;
@@ -25,6 +36,7 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static java.util.regex.Pattern.compile;
@@ -117,121 +129,23 @@ public class SampleTest {
         String st = "，美丽，好看，1，，";
         String[] split = st.split("，");
         System.out.println(split.length);
+        for (String s : split) {
+            System.out.println(s);
+        }
+
         st = "，美丽，好看，1，，1";
         split = st.split("，");
         System.out.println(split.length);
-    }
-
-    class HashCode {
-        private Integer i;
-
-        public Integer getI() {
-            return i;
+        for (String s : split) {
+            System.out.println(s);
         }
-
-        public void setI(Integer i) {
-            this.i = i;
-        }
-
-        HashCode() {
-
-        }
-
-        public HashCode(Integer i) {
-            this.i = i;
-        }
-    }
-
-    @Test
-    public void testHashCode() {
-        for (int i = 0; i < 10; i++) {
-            HashCode hashCode = new HashCode();
-//            hashCode.setI(1);
-            System.out.println(hashCode.hashCode());
-        }
-        B b = new B();
-        b.a();
-    }
-
-    abstract class A {
-        public void a() {
-        }
-    }
-
-    class B extends A {
 
     }
 
-    @Test
-    public void testboolean(){
-        Random random = new Random();
-        for (int i = 0; i <10000000 ; i++) {
-            int num = random.nextInt(100)+50;
-            int day = random.nextInt(30)+10;
-            List<Integer> randomNum = getRandom(num, day);
-            int total = 0;
-            for (Integer integer : randomNum) {
-                List<Integer> integers = perVoteNum(integer, 5);
-                total+=sum(integers);
-            }
-            if (num!=total){
-                log.info("num:{},day:{}",num,day);
-                log.info("randomNum:{}",randomNum.toString());
-            }
-        }
-    }
 
-    private int sum(List<Integer> list){
-        return list.stream().mapToInt(i->i).sum();
-    }
-    private List<Integer> getRandom(int num, int day) {
-        if (day==1){
-            return Arrays.asList(num);
-        }
-        Random random = new Random();
-        int[] a = new int[day - 1];
-        for (int i = 0; i < day - 1; i++) {
-            a[i] = random.nextInt(num);
-        }
-        Arrays.sort(a);
-        List<Integer> result = new LinkedList<>();
-        int temp = 0;
-        for (int i = 0; i < day - 1; i++) {
-            result.add( a[i] - temp);
-            temp = a[i];
-        }
-        result.add( num - a[day - 2]);
-        return result;
-    }
-    private List<Integer> perVoteNum(int num,int maxVoteNum){
-        if (num==0){
-            return new ArrayList<>();
-        }
-        List<Integer> randoms = getRandom(num, 4);
-        List<Integer> perVoteNum = new LinkedList<>();
-        Queue<Integer> queue = new LinkedList<>(randoms);
 
-        while (!queue.isEmpty()){
-            Integer poll = queue.poll();
-            if (poll>maxVoteNum){
-                randoms = getRandom(poll, 2);
-                queue.addAll(randoms);
-            }else if (poll>0){
-                perVoteNum.add(poll);
-            }
-        }
-        return perVoteNum;
-    }
-    @Test
-    public void testArray(){
-        int array[] = new int[10];
-        String[] strs = new String[10];
-        System.out.println(array[1]);
-    }
-    @Test
-    public void testa(){
-        Map<String,String> map = new HashMap<>();
-        map.put("1","hah");
-        map.get(null);
-    }
+
+
+
+
 }
