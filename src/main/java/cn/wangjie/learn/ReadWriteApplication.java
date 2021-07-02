@@ -1,10 +1,12 @@
 package cn.wangjie.learn;
 
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 
 @SpringBootApplication
+@MapperScan(basePackages = {"cn.wangjie.learn.dao"})
 public class ReadWriteApplication {
 
     public static void main(String[] args) {

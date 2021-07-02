@@ -2,6 +2,7 @@ package cn.wangjie.learn;
 
 import org.junit.Test;
 
+import javax.sound.midi.Soundbank;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -41,13 +42,20 @@ public class RegularTest {
     }
     /**
      * @Author WangJie
-     * @Description 包含
+     * @Description 取两者之间的字符，不包含边界
      * @param
      * @Date  2020/6/5 11:31
      */
     @Test
     public void testContain(){
-        String regex=".?*";
+        String pattern = "(?<=:).*?(?=/)";
+        Pattern r = Pattern.compile(pattern);
+        Matcher m = r.matcher("git@git.yupaopao.com:terminal/android/tangdou/tangguo.git");
+        String splitStr = "terminal";
+        while (m.find()){
+            System.out.println(m.group());
+        }
+
 
     }
 }

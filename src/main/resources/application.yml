@@ -14,3 +14,15 @@ spring:
     password:
     port: 6379
     database: 0
+
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    password: 1234
+    username: 1234
+
+mybatis:
+  mapper-locations: classpath:mapper/*Mapper.xml
+  configuration:
+    map-underscore-to-camel-case: true

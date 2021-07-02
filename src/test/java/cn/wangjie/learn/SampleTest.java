@@ -4,10 +4,11 @@ import cn.wangjie.learn.entity.Node;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.BitSet;
-import java.util.Collections;
-import java.util.List;
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.net.URL;
+import java.util.*;
 import java.util.stream.IntStream;
 
 /**
@@ -111,10 +112,23 @@ public class SampleTest {
 
     }
 
+    @Test
+    public void testRun() throws IOException {
+        Runtime.getRuntime().exec("D:\\Documents\\Downloads\\ideaIU-2021.1.1.exe");
+    }
 
+    @Test
+    public void testPath() throws IOException {
+        URL resource = this.getClass().getResource("/application.yml");
 
+        System.out.println(resource.getFile());
+        System.out.println(this.getClass().getClassLoader());
 
+        System.out.println(GiveMeK.class.getClassLoader().getResources("application.yml").nextElement());
+    }
 
-
-
+    @Test
+    public void testOptionalThrow() {
+        Optional.ofNullable(null).orElseThrow(()->new RuntimeException("test"))    ;
+    }
 }
